@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Advanced JS Task</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f4f4f4;
+      text-align: center;
+    }
+
+    header {
+      background: teal;
+      color: white;
+      padding: 15px;
+    }
+
+    .container {
+      padding: 20px;
+    }
+
+    /* Quiz Styling */
+    .quiz-box {
+      background: white;
+      padding: 20px;
+      margin: 20px auto;
+      width: 60%;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgb(9, 164, 248);
+    }
+
+    button {
+      padding: 10px 15px;
+      margin: 10px;
+      border: none;
+      background: rgb(2, 43, 177);
+      color: white;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    button:hover {
+      background: rgb(3, 48, 48);
+    }
+
+    /* Joke Box */
+    .joke-box {
+      background: #fff;
+      padding: 20px;
+      margin: 20px auto;
+      width: 60%;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgb(3, 6, 88);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .quiz-box, .joke-box {
+        width: 90%;
+      }
+
+      h1 {
+        font-size: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>Task : 3 Project</h1>
+</header>
+
+<div class="container">
+
+  <!-- QUIZ -->
+  <div class="quiz-box">
+    <h2>Simple Quiz</h2>
+    <p id="question">Question will appear here</p>
+    <div id="answers"></div>
+    <button onclick="nextQuestion()">Next</button>
+    <p id="score"></p>
+  </div>
+
+  <!-- API SECTION -->
+  <div class="joke-box">
+    <h2>Get a Random Joke 😂</h2>
+    <p id="joke">Click button to load joke</p>
+    <button onclick="getJoke()">Get Joke</button>
+  </div>
+
+</div>
+
+<script>
+  // QUIZ DATA
+  const quiz = [
+    {
+      question: "What does HTML stand for?",
+      answers: ["Hyper Text Markup Language", "High Text Machine Language", "Hyper Tool Markup Language"],
+      correct: 0
+    },
+    {
+      question: "Which language is used for styling?",
+      answers: ["HTML", "CSS", "JavaScript"],
+      correct: 1
+    },
+    {
+      question: "Which is used for interactivity?",
+      answers: ["CSS", "HTML", "JavaScript"],
+      correct: 2
+    }
+  ];
+
+  let index = 0;
+  let score = 0;
+
+  function loadQuestion() {
+    const q = quiz[index];
+    document.getElementById("question").innerText = q.question;
+
+    const answersDiv = document.getElementById("answers");
+    answersDiv.innerHTML = "";
+
+    q.answers.forEach((ans, i) => {
+      const btn = document.createElement("button");
+      btn.innerText = ans;
+      btn.onclick = () => checkAnswer(i);
+      answersDiv.appendChild(btn);
+    });
+  }
+
+  function checkAnswer(i) {
+    if (i === quiz[index].correct) {
+      score++;
+    }
+  }
+
+  function nextQuestion() {
+    index++;
+    if (index < quiz.length) {
+      loadQuestion();
+    } else {
+      document.getElementById("question").innerText = "Quiz Finished!";
+      document.getElementById("answers").innerHTML = "";
+      document.getElementById("score").innerText = "Score: " + score;
+    }
+  }
+
+  loadQuestion();
+
+  // API FETCH (JOKE)
+  async function getJoke() {
+    const res = await fetch("https://official-joke-api.appspot.com/random_joke");
+    const data = await res.json();
+
+    document.getElementById("joke").innerText =
+      data.setup + " 😂 " + data.punchline;
+  }
+</script>
+
+</body>
+</html>
